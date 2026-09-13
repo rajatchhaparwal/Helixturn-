@@ -2,38 +2,32 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Facility', href: '#facility' },
-  { name: 'Services', href: '#services' },
-  { name: 'Quality', href: '#quality' },
+  { name: 'Home',       href: '#home' },
+  { name: 'About',      href: '#about' },
+  { name: 'Services',   href: '#services' },
+  { name: 'Facility',   href: '#facility' },
+  { name: 'Quality',    href: '#quality' },
   { name: 'Industries', href: '#industries' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Contact',    href: '#contact' },
 ];
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled]     = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     let ticking = false;
-
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 50);
-
-          const sections = navLinks.map((link) => link.href.substring(1));
-          const scrollPos = window.scrollY + 140;
-
-          for (let i = sections.length - 1; i >= 0; i--) {
-            const section = document.getElementById(sections[i]);
-            if (section) {
-              if (scrollPos >= section.offsetTop) {
-                setActiveSection(sections[i]);
-                break;
-              }
+          setIsScrolled(window.scrollY > 60);
+          const scrollPos = window.scrollY + 120;
+          for (let i = navLinks.length - 1; i >= 0; i--) {
+            const el = document.getElementById(navLinks[i].href.slice(1));
+            if (el && scrollPos >= el.offsetTop) {
+              setActiveSection(navLinks[i].href.slice(1));
+              break;
             }
           }
           ticking = false;
@@ -41,23 +35,17 @@ export default function Navbar() {
         ticking = true;
       }
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e, href) => {
+  const scrollTo = (e, href) => {
     e.preventDefault();
     setIsMobileOpen(false);
     const target = document.querySelector(href);
     if (target) {
-      const headerOffset = 80;
-      const elementPosition = target.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
+      const y = target.getBoundingClientRect().top + window.pageYOffset - 76;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
@@ -65,97 +53,97 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-graphite-950/90 backdrop-blur-xl border-b border-graphite-700/30 shadow-2xl shadow-black/20'
+          ? 'bg-forge-950/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/40'
           : 'bg-transparent'
       }`}
     >
-      <div className="section-container">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+      <div className="container-xl">
+        <div className="flex items-center justify-between h-[76px]">
+          {/* ── Logo ── */}
           <a
             href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
+            onClick={(e) => scrollTo(e, '#home')}
             className="flex items-center gap-3 group"
+            aria-label="Helixturn Engineering home"
           >
-            {/* Trident Logo Mark */}
-            <div className="relative w-10 h-10">
-              <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-                {/* Trident shape */}
-                <path
-                  d="M20 2L20 38M12 8L20 2L28 8M8 14L20 8L32 14"
-                  stroke="url(#trident-gradient)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:stroke-industrial-400 transition-colors duration-300"
-                />
+            {/* Logo mark: stylised helix H */}
+            <div className="relative w-9 h-9 flex-shrink-0">
+              <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
+                <rect width="36" height="36" rx="8" fill="url(#navLogoGrad)"/>
+                {/* Helix-H letter */}
+                <path d="M10 9v18M10 18h16M26 9v18" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="18" cy="18" r="2" fill="white" fillOpacity="0.5"/>
                 <defs>
-                  <linearGradient id="trident-gradient" x1="20" y1="2" x2="20" y2="38">
-                    <stop stopColor="#3B82F6" />
-                    <stop offset="1" stopColor="#1E40AF" />
+                  <linearGradient id="navLogoGrad" x1="0" y1="0" x2="36" y2="36">
+                    <stop stopColor="#FF8C00"/>
+                    <stop offset="1" stopColor="#E07000"/>
                   </linearGradient>
                 </defs>
               </svg>
             </div>
-            <div>
-              <span className="text-xl font-heading font-bold text-steel-100 tracking-wide group-hover:text-industrial-400 transition-colors duration-300">
-                TRIDENT
+            <div className="leading-none">
+              <span className="block text-lg font-heading font-bold text-steel-100 tracking-wide group-hover:text-spark-400 transition-colors duration-300">
+                HELIXTURN
               </span>
-              <span className="block text-[10px] font-heading text-steel-500 tracking-[0.3em] uppercase -mt-1">
-                Precision Engineering
+              <span className="block text-[9px] font-heading text-steel-500 tracking-[0.35em] uppercase -mt-0.5">
+                Engineering
               </span>
             </div>
           </a>
 
-          {/* Desktop Nav */}
+          {/* ── Desktop Links ── */}
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative px-4 py-2 text-sm font-medium font-heading tracking-wide transition-colors duration-300 rounded-lg ${
-                  activeSection === link.href.substring(1)
-                    ? 'text-industrial-400'
-                    : 'text-steel-400 hover:text-steel-200'
-                }`}
-              >
-                {link.name}
-                {activeSection === link.href.substring(1) && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-industrial-500 rounded-full"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const active = activeSection === link.href.slice(1);
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => scrollTo(e, link.href)}
+                  className={`relative px-4 py-2 text-sm font-heading font-medium tracking-wide rounded-lg transition-colors duration-300 ${
+                    active ? 'text-spark-400' : 'text-steel-400 hover:text-steel-100'
+                  }`}
+                >
+                  {link.name}
+                  {active && (
+                    <motion.div
+                      layoutId="navIndicator"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
+                      style={{ background: '#FF8C00' }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
           </div>
 
-          {/* CTA + Mobile Toggle */}
-          <div className="flex items-center gap-4">
+          {/* ── CTA + Mobile ── */}
+          <div className="flex items-center gap-3">
             <a
               href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
-              className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-industrial-600 text-white text-sm font-heading font-semibold rounded-lg transition-all duration-300 hover:bg-industrial-500 hover:shadow-lg hover:shadow-industrial-600/25"
+              onClick={(e) => scrollTo(e, '#contact')}
+              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 btn-spark text-sm rounded-lg"
+              id="nav-get-quote-btn"
             >
-              Request Quote
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
               </svg>
+              Get Quote
             </a>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile hamburger */}
             <button
+              id="nav-mobile-menu-btn"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="lg:hidden p-2 text-steel-400 hover:text-steel-200 transition-colors"
+              className="lg:hidden p-2 text-steel-400 hover:text-steel-100 transition-colors"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMobileOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
                 )}
               </svg>
             </button>
@@ -163,41 +151,47 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ── Mobile menu ── */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="lg:hidden bg-graphite-900/98 backdrop-blur-xl border-b border-graphite-700/30 overflow-hidden"
+            transition={{ duration: 0.3 }}
+            className="lg:hidden overflow-hidden"
+            style={{ background: 'rgba(10,13,20,0.98)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
           >
-            <div className="section-container py-6 space-y-1">
-              {navLinks.map((link, index) => (
+            <div className="container-xl py-5 space-y-1">
+              {navLinks.map((link, i) => (
                 <motion.a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  initial={{ opacity: 0, x: -20 }}
+                  onClick={(e) => scrollTo(e, link.href)}
+                  initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`block px-4 py-3 text-base font-heading font-medium rounded-lg transition-colors duration-200 ${
-                    activeSection === link.href.substring(1)
-                      ? 'text-industrial-400 bg-industrial-900/20'
-                      : 'text-steel-400 hover:text-steel-200 hover:bg-graphite-800/50'
+                  transition={{ delay: i * 0.05 }}
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-heading font-medium transition-colors duration-200 ${
+                    activeSection === link.href.slice(1)
+                      ? 'text-spark-400 bg-spark-500/10'
+                      : 'text-steel-400 hover:text-steel-100 hover:bg-white/5'
                   }`}
                 >
+                  {activeSection === link.href.slice(1) && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-spark-500 flex-shrink-0"/>
+                  )}
                   {link.name}
                 </motion.a>
               ))}
-              <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
-                className="block mt-4 px-4 py-3 bg-industrial-600 text-white text-center font-heading font-semibold rounded-lg"
-              >
-                Request Quote
-              </a>
+              <div className="pt-3 pb-1">
+                <a
+                  href="#contact"
+                  onClick={(e) => scrollTo(e, '#contact')}
+                  className="block w-full text-center btn-spark rounded-xl py-3.5"
+                >
+                  Get a Quote
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

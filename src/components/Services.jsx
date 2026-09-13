@@ -1,186 +1,287 @@
-import { motion } from 'framer-motion';
-import ScrollReveal from './ScrollReveal';
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 
+function Reveal({ children, delay = 0, className = '' }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.65, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ── Service data ── */
 const services = [
   {
+    id: 'blank-turning',
+    title: 'Blank Turning',
+    tag: 'Primary',
+    desc: 'CNC turning of forged and cast blanks to precise dimensions before downstream operations. Multi-axis turning centres handle OD, ID, facing, chamfering in one setup.',
+    specs: ['OD up to 400mm', 'Chuck: 250mm', 'Hard turning HRC 55–62', 'Tight IT6 tolerances'],
+    image: '/images/machines/cnc-turning-center-1.jpg',
+    color: '#FF8C00',
+  },
+  {
+    id: 'milling',
+    title: 'Milling Process',
+    tag: 'CNC',
+    desc: 'Vertical and horizontal milling for keyways, slots, flat surfaces, pockets, and complex profiles. CNC machining centres deliver repeatable accuracy across production runs.',
+    specs: ['VMC & HMC centres', 'Face, slot & profile milling', 'Indexable carbide tooling', 'Ra 0.8–1.6μm finish'],
+    image: '/images/machines/digital-cnc-manufacturing.jpg',
+    color: '#14B8A6',
+  },
+  {
+    id: 'broaching',
+    title: 'Broaching',
+    tag: 'Precision',
+    desc: 'Internal and external broaching for keyways, splines, hexagons, and custom profiles. High production rate with micron-level accuracy on each stroke.',
+    specs: ['Internal & external', 'Keyway, spline, hex profiles', 'Hardened material capability', 'High-volume production'],
+    image: '/images/machines/cnc-lathe-operation.jpg',
+    color: '#8B5CF6',
+  },
+  {
+    id: 'facing-drilling',
+    title: 'Facing & Drilling',
+    tag: 'Setup',
+    desc: 'Precision facing to establish datum surfaces, combined with multi-spindle drilling, tapping, reaming, and counterboring on CNC machining centres.',
+    specs: ['Datum face milling', 'Multi-spindle drilling', 'Tapping & reaming', 'Counterbore & spot face'],
+    image: '/images/machines/cnc-lathe-machine-bay.jpg',
+    color: '#FF8C00',
+  },
+  {
+    id: 'hobbing',
+    title: 'Hobbing',
+    tag: 'Gear',
+    desc: 'CNC gear hobbing for spur and helical gears. Generates precise involute profiles at high production rates, ready for post-heat-treatment grinding.',
+    specs: ['Spur & helical gears', 'Module 0.5 – 6', 'DIN 8–10 pre-grind class', 'High-speed HSS hobs'],
+    image: '/images/machines/turning-center-dewas.jpg',
+    color: '#14B8A6',
+  },
+  {
+    id: 'od-grinding',
+    title: 'OD Grinding',
+    tag: 'Grinding',
+    desc: 'CNC cylindrical OD grinding for shafts, pins, and outer diameters of gear blanks. Sub-micron roundness control with consistent surface finish across batches.',
+    specs: ['Max length: 1000mm', 'Roundness ≤ 0.002mm', 'Ra 0.4–0.8μm', 'Hardened & soft material'],
+    image: '/images/machines/od-grinding-setup.jpg',
+    color: '#FF8C00',
+  },
+  {
+    id: 'bore-grinding',
+    title: 'Bore Grinding',
+    tag: 'Grinding',
+    desc: 'Internal bore grinding (ID grinding) for bores, sleeves, and gear bore holes. Achieves H6/H7 tolerance with superb cylindricity for press and interference fits.',
+    specs: ['Bore dia: 10–300mm', 'Cylindricity ≤ 0.003mm', 'Blind & through bores', 'H6 / H7 fit classes'],
+    image: '/images/machines/od-bore-grinding-1.jpg',
+    color: '#14B8A6',
+  },
+  {
+    id: 'hard-part-turning',
+    title: 'Hard Part Turning',
+    tag: 'Special',
+    desc: 'CBN & ceramic insert hard turning of components up to HRC 65. Replaces grinding on many non-critical surfaces, reducing cycle time and cost.',
+    specs: ['Hardness up to HRC 65', 'CBN & ceramic inserts', 'Ra 0.4–1.2μm achievable', 'Eliminates regrind step'],
+    image: '/images/machines/cnc-turning-process.jpg',
+    color: '#8B5CF6',
+  },
+  {
+    id: 'gear-grinding',
     title: 'Gear Grinding',
-    description:
-      'Profile and generating grinding of spur, helical, and internal gears. Achieving DIN 5 class accuracy with surface finish down to Ra 0.4μm on hardened steels.',
-    specs: [
-      'Module range: 0.5 – 8',
-      'Max diameter: 400mm',
-      'DIN 3–7 class accuracy',
-      'Profile & generating methods',
-    ],
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="16" cy="16" r="8" />
-        <path d="M16 4v4M16 24v4M4 16h4M24 16h4M7.5 7.5l2.8 2.8M21.7 21.7l2.8 2.8M7.5 24.5l2.8-2.8M21.7 10.3l2.8-2.8" strokeLinecap="round" />
-      </svg>
-    ),
-    accent: 'from-blue-500 to-blue-700',
+    tag: 'Premium',
+    desc: 'Profile and generating gear grinding for spur, helical, and internal gears after case hardening. Achieves DIN 5 class accuracy with Ra 0.4μm tooth flank finish.',
+    specs: ['DIN 5 class accuracy', 'Module 0.5 – 8', 'Flank Ra ≤ 0.4μm', 'Profile & generating method'],
+    image: '/images/machines/cnc-precision-grinding.jpg',
+    color: '#FF8C00',
   },
   {
-    title: 'Precision Machining',
-    description:
-      'CNC turning, milling, and cylindrical grinding for gear blanks, shafts, and precision components. Sub-micron accuracy with repeatable quality across production runs.',
-    specs: [
-      'CNC turning up to 250mm',
-      'Cylindrical grinding ±0.001mm',
-      'Hard turning HRC 55–62',
-      'Batch & prototype runs',
-    ],
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="6" y="6" width="20" height="20" rx="2" />
-        <path d="M6 16h20M16 6v20" strokeLinecap="round" />
-        <circle cx="16" cy="16" r="3" />
-      </svg>
-    ),
-    accent: 'from-cyan-500 to-blue-600',
+    id: 'traceability',
+    title: 'Traceability Marking',
+    tag: 'Quality',
+    desc: 'Dot-peen and laser traceability marking of every component with part number, heat number, operation date, and batch ID for full supply chain traceability.',
+    specs: ['Dot-peen & laser methods', 'Part no. / heat no.', 'Batch / date stamping', 'QR & matrix codes'],
+    image: '/images/machines/cnc-lathe-jobwork.jpg',
+    color: '#14B8A6',
   },
   {
-    title: 'Surface Finishing',
-    description:
-      'Controlled surface finishing to achieve required Ra values. Post-grinding lapping and honing for critical mating surfaces in power transmission applications.',
-    specs: [
-      'Surface finish Ra 0.2–1.6μm',
-      'Honing & lapping available',
-      'Deburring & edge treatment',
-      'Phosphate coating prep',
-    ],
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M4 28 L28 4" strokeLinecap="round" />
-        <path d="M8 24 C12 20, 16 24, 20 20 C24 16, 24 12, 28 8" strokeLinecap="round" />
-        <path d="M4 24 C8 20, 12 24, 16 20 C20 16, 20 12, 24 8" strokeLinecap="round" />
-      </svg>
-    ),
-    accent: 'from-indigo-500 to-blue-700',
+    id: 'packaging',
+    title: 'Special Packaging',
+    tag: 'Dispatch',
+    desc: 'Anti-corrosion VCI packaging, foam-lined trays, and custom crating for long-distance or export dispatch. Inspection certificate included with every batch.',
+    specs: ['VCI poly-bag wrapping', 'Foam-cushioned trays', 'Rust-proof oiling option', 'Inspection cert enclosed'],
+    image: '/images/machines/lathe-workshop-floor.jpg',
+    color: '#8B5CF6',
   },
   {
-    title: 'Custom Solutions',
-    description:
-      'End-to-end capability from gear blank to finished, inspected component. We work from customer drawings or reverse-engineer from samples with full dimensional reports.',
-    specs: [
-      'Drawing-to-delivery',
-      'Reverse engineering',
-      'CMM inspection reports',
-      'Material certification',
-    ],
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M16 4l3 6h6l-5 4 2 6-6-4-6 4 2-6-5-4h6z" strokeLinejoin="round" />
-        <circle cx="16" cy="24" r="4" />
-        <path d="M16 20v-2" strokeLinecap="round" />
-      </svg>
-    ),
-    accent: 'from-sky-500 to-blue-700',
+    id: 'forging',
+    title: 'Forging (Secondary)',
+    tag: 'Support',
+    desc: 'Drop forging and closed-die forging of blanks as a secondary service. Ideal for customers who need both forged blanks and full machining from a single source.',
+    specs: ['Drop & closed-die forging', 'Carbon & alloy steels', 'In-house normalising', 'Supply blank + machined'],
+    image: '/images/machines/heavy-lathe-machining.jpg',
+    color: '#FF8C00',
   },
-];
-
-const materials = [
-  'EN8', 'EN19', 'EN24', 'EN36', '20MnCr5', 'SAE 8620',
-  '16MnCr5', 'EN353', 'SCM420', '42CrMo4',
 ];
 
 export default function Services() {
+  const [active, setActive] = useState(null);
+
   return (
-    <section id="services" className="section-padding relative gear-pattern">
-      <div className="section-container">
+    <section
+      id="services"
+      className="section-pad relative overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #06080D 0%, #0A0D14 100%)' }}
+    >
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-grid-blue bg-[size:60px_60px] opacity-40 pointer-events-none"/>
+      <div className="orb-orange" style={{ width: 800, height: 800, top: '10%', right: '-20%' }}/>
+
+      <div className="container-xl">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <ScrollReveal>
-            <div className="section-label justify-center">
-              <span className="w-8 h-px bg-industrial-500" />
-              Capabilities
-              <span className="w-8 h-px bg-industrial-500" />
-            </div>
-          </ScrollReveal>
+        <Reveal className="text-center max-w-3xl mx-auto mb-16">
+          <div className="eyebrow mb-4 justify-center">
+            <span className="spark-line"/>
+            What We Do
+            <span className="spark-line" style={{ background: 'linear-gradient(270deg, #FF8C00, transparent)' }}/>
+          </div>
+          <h2 className="section-title mb-5">
+            Full-Spectrum CNC<br/>
+            <span className="text-spark">Machining Services</span>
+          </h2>
+          <p className="section-sub mx-auto">
+            From the first cut to final dispatch — every machining operation, quality check,
+            and traceability step handled in-house at Dewas.
+          </p>
+        </Reveal>
 
-          <ScrollReveal delay={0.1}>
-            <h2 className="section-title">
-              What We
-              <span className="gradient-text"> Deliver</span>
-            </h2>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.2}>
-            <p className="section-subtitle mx-auto">
-              From rough gear blanks to finished, inspection-verified gears — our capabilities 
-              cover the full spectrum of precision gear manufacturing.
-            </p>
-          </ScrollReveal>
-        </div>
-
-        {/* Service Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {services.map((service, index) => (
-            <ScrollReveal key={service.title} delay={index * 0.1}>
+        {/* Service cards grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {services.map((svc, i) => (
+            <Reveal key={svc.id} delay={Math.min(i * 0.05, 0.3)}>
               <motion.div
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="glass-card-hover p-8 group h-full"
+                className="group relative rounded-2xl overflow-hidden cursor-pointer"
+                style={{ height: 340, border: '1px solid rgba(255,255,255,0.05)' }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setActive(active === svc.id ? null : svc.id)}
+                id={`service-card-${svc.id}`}
               >
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.accent} p-3 text-white mb-6 
-                  transition-shadow duration-500 group-hover:shadow-lg group-hover:shadow-industrial-600/20`}>
-                  {service.icon}
+                {/* Background image */}
+                <div className="absolute inset-0 img-zoom">
+                  <img
+                    src={svc.image}
+                    alt={svc.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
                 </div>
 
-                {/* Title & Description */}
-                <h3 className="text-xl font-heading font-semibold text-steel-100 mb-3 group-hover:text-industrial-400 transition-colors duration-300">
-                  {service.title}
-                </h3>
-                <p className="text-steel-400 text-sm leading-relaxed mb-5">
-                  {service.description}
-                </p>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to top, rgba(6,8,13,0.97) 35%, rgba(6,8,13,0.5) 70%, rgba(6,8,13,0.2) 100%)' }}
+                />
 
-                {/* Specs */}
-                <ul className="space-y-2">
-                  {service.specs.map((spec) => (
-                    <li key={spec} className="flex items-center gap-3 text-sm text-steel-300">
-                      <div className="w-1.5 h-1.5 bg-industrial-500 rounded-full flex-shrink-0" />
-                      {spec}
-                    </li>
-                  ))}
-                </ul>
+                {/* Tag */}
+                <div className="absolute top-4 right-4">
+                  <span
+                    className="px-2.5 py-1 rounded-lg text-[10px] font-heading font-bold tracking-wider uppercase"
+                    style={{
+                      background: `${svc.color}20`,
+                      color: svc.color,
+                      border: `1px solid ${svc.color}30`,
+                    }}
+                  >
+                    {svc.tag}
+                  </span>
+                </div>
+
+                {/* Content at bottom */}
+                <div className="absolute bottom-0 inset-x-0 p-5">
+                  {/* Indicator dot */}
+                  <div className="w-8 h-0.5 mb-3 rounded-full transition-all duration-300 group-hover:w-12"
+                    style={{ background: svc.color }}/>
+
+                  <h3 className="font-heading font-bold text-steel-100 text-lg mb-1 group-hover:text-white transition-colors">
+                    {svc.title}
+                  </h3>
+
+                  <AnimatePresence>
+                    {active === svc.id ? (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <p className="text-steel-400 text-xs leading-relaxed mt-2 mb-3">{svc.desc}</p>
+                        <ul className="space-y-1">
+                          {svc.specs.map((sp) => (
+                            <li key={sp} className="flex items-center gap-2 text-[11px] text-steel-300">
+                              <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: svc.color }}/>
+                              {sp}
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    ) : (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="text-steel-500 text-xs line-clamp-2 mt-1"
+                      >
+                        {svc.desc}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+
+                  <div className="mt-3 text-[10px] font-heading text-steel-600 group-hover:text-spark-400 transition-colors">
+                    {active === svc.id ? '↑ Show less' : 'Tap to see details →'}
+                  </div>
+                </div>
               </motion.div>
-            </ScrollReveal>
+            </Reveal>
           ))}
         </div>
 
-        {/* Materials We Handle */}
-        <ScrollReveal>
-          <div className="glass-card p-8 md:p-10">
-            <div className="flex flex-col md:flex-row md:items-center gap-6">
-              <div className="md:w-1/3">
-                <h3 className="text-xl font-heading font-semibold text-steel-100 mb-2">
-                  Materials We Handle
-                </h3>
-                <p className="text-sm text-steel-400">
-                  Case-hardened, through-hardened, and nitrided alloy steels — ready for precision grinding.
-                </p>
-              </div>
-              <div className="md:w-2/3 flex flex-wrap gap-3">
-                {materials.map((mat) => (
-                  <motion.span
-                    key={mat}
-                    whileHover={{ scale: 1.05 }}
-                    className="px-4 py-2 bg-graphite-700/50 border border-graphite-600/40 rounded-lg text-sm font-mono text-industrial-300 
-                      hover:border-industrial-600/50 hover:bg-industrial-900/20 transition-colors duration-300 cursor-default"
-                  >
-                    {mat}
-                  </motion.span>
-                ))}
-              </div>
+        {/* CTA bar */}
+        <Reveal delay={0.2}>
+          <div className="mt-16 rounded-2xl p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-6"
+            style={{ background: 'rgba(255,140,0,0.05)', border: '1px solid rgba(255,140,0,0.15)' }}
+          >
+            <div>
+              <h3 className="font-heading font-bold text-steel-100 text-xl mb-1">
+                Have a custom requirement?
+              </h3>
+              <p className="text-steel-500 text-sm">
+                Send us your drawing or sample. We'll assess and revert within 24 hours.
+              </p>
             </div>
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.querySelector('#contact');
+                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 76, behavior: 'smooth' });
+              }}
+              className="btn-spark whitespace-nowrap flex-shrink-0"
+              id="services-rfq-btn"
+            >
+              Send RFQ
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
           </div>
-        </ScrollReveal>
+        </Reveal>
       </div>
 
-      {/* Section Divider */}
-      <div className="section-divider mt-20 mx-auto w-full max-w-7xl" />
+      <div className="divider mt-20 container-xl"/>
     </section>
   );
 }
