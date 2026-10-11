@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../../public/favicon.svg';
 
 const navLinks = [
-  { name: 'Home',       href: '#home' },
-  { name: 'About',      href: '#about' },
-  { name: 'Services',   href: '#services' },
-  { name: 'Facility',   href: '#facility' },
-  { name: 'Quality',    href: '#quality' },
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Services', href: '#services' },
+  { name: 'Facility', href: '#facility' },
+  { name: 'Quality', href: '#quality' },
   { name: 'Industries', href: '#industries' },
-  { name: 'Contact',    href: '#contact' },
+  { name: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled]     = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
@@ -51,11 +52,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
           ? 'bg-forge-950/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/40'
           : 'bg-transparent'
-      }`}
+        }`}
     >
       <div className="container-xl">
         <div className="flex items-center justify-between h-[76px]">
@@ -68,18 +68,7 @@ export default function Navbar() {
           >
             {/* Logo mark: stylised helix H */}
             <div className="relative w-9 h-9 flex-shrink-0">
-              <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
-                <rect width="36" height="36" rx="8" fill="url(#navLogoGrad)"/>
-                {/* Helix-H letter */}
-                <path d="M10 9v18M10 18h16M26 9v18" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="18" cy="18" r="2" fill="white" fillOpacity="0.5"/>
-                <defs>
-                  <linearGradient id="navLogoGrad" x1="0" y1="0" x2="36" y2="36">
-                    <stop stopColor="#FF8C00"/>
-                    <stop offset="1" stopColor="#E07000"/>
-                  </linearGradient>
-                </defs>
-              </svg>
+              <img src={logo} />
             </div>
             <div className="leading-none">
               <span className="block text-lg font-heading font-bold text-steel-100 tracking-wide group-hover:text-spark-400 transition-colors duration-300">
@@ -100,9 +89,8 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => scrollTo(e, link.href)}
-                  className={`relative px-4 py-2 text-sm font-heading font-medium tracking-wide rounded-lg transition-colors duration-300 ${
-                    active ? 'text-spark-400' : 'text-steel-400 hover:text-steel-100'
-                  }`}
+                  className={`relative px-4 py-2 text-sm font-heading font-medium tracking-wide rounded-lg transition-colors duration-300 ${active ? 'text-spark-400' : 'text-steel-400 hover:text-steel-100'
+                    }`}
                 >
                   {link.name}
                   {active && (
@@ -127,7 +115,7 @@ export default function Navbar() {
               id="nav-get-quote-btn"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
               Get Quote
             </a>
@@ -141,9 +129,9 @@ export default function Navbar() {
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMobileOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
@@ -171,14 +159,13 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-heading font-medium transition-colors duration-200 ${
-                    activeSection === link.href.slice(1)
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-heading font-medium transition-colors duration-200 ${activeSection === link.href.slice(1)
                       ? 'text-spark-400 bg-spark-500/10'
                       : 'text-steel-400 hover:text-steel-100 hover:bg-white/5'
-                  }`}
+                    }`}
                 >
                   {activeSection === link.href.slice(1) && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-spark-500 flex-shrink-0"/>
+                    <span className="w-1.5 h-1.5 rounded-full bg-spark-500 flex-shrink-0" />
                   )}
                   {link.name}
                 </motion.a>

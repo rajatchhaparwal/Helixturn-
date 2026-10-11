@@ -49,12 +49,39 @@ export default function Contact() {
     e.preventDefault();
     setSubmitting(true);
     setError('');
-    // Simulate API call — replace with Formspree / EmailJS / backend
-    await new Promise((r) => setTimeout(r, 1600));
-    setSubmitting(false);
-    setSubmitted(true);
-    setForm(initialForm);
-    setTimeout(() => setSubmitted(false), 6000);
+
+    try {
+      const formData = new FormData(e.target);
+      const accessKey =
+        import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ||
+        '93f25b2a-dfba-458a-a9b9-7f2b99ada61f';
+
+      formData.append('access_key', accessKey);
+      formData.append(
+        'subject',
+        `New RFQ Inquiry - ${form.company || form.name || 'Website Visitor'}`
+      );
+      formData.append('from_name', 'Helixturn RFQ Form');
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setForm(initialForm);
+        setTimeout(() => setSubmitted(false), 6000);
+      } else {
+        setError(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setError('Unable to send request. Please check your internet connection or reach out directly.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const fieldClass = 'field';
@@ -269,6 +296,23 @@ export default function Contact() {
                     rows={4} placeholder="Describe your component, special requirements, heat treatment specs, etc."
                     className={fieldClass} style={{ resize: 'vertical', minHeight: 100 }}/>
                 </div>
+
+                {/* Honeypot spam protection */}
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+                {/* Error Banner */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs"
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span>{error}</span>
+                  </motion.div>
+                )}
 
                 {/* Submit */}
                 <AnimatePresence mode="wait">

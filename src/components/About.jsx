@@ -49,10 +49,9 @@ function StatCard({ value, label, icon }) {
 }
 
 const stats = [
-  { value: '15+',   label: 'Years in Machining', icon: '🏭' },
-  { value: '50+',   label: 'CNC Machines',        icon: '⚙️' },
-  { value: '200+',  label: 'Parts / Day',          icon: '📦' },
-  { value: '99.8%', label: 'Quality Pass Rate',    icon: '✅' },
+  { value: '15+', label: 'Years in Machining', icon: '🏭' },
+  { value: '2000+', label: 'Parts / Day', icon: '📦' },
+  { value: '99.8%', label: 'Quality Pass Rate', icon: '✅' },
 ];
 
 const highlights = [
@@ -66,7 +65,7 @@ export default function About() {
   return (
     <section id="about" className="section-pad relative overflow-hidden" style={{ background: '#06080D' }}>
       {/* Background glow */}
-      <div className="orb-orange" style={{ width: 600, height: 600, top: '-200px', left: '-200px' }}/>
+      <div className="orb-orange" style={{ width: 600, height: 600, top: '-200px', left: '-200px' }} />
 
       <div className="container-xl">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -75,14 +74,14 @@ export default function About() {
           <div>
             <Reveal>
               <div className="eyebrow mb-4">
-                <span className="spark-line"/>
+                <span className="spark-line" />
                 About Helixturn
               </div>
             </Reveal>
 
             <Reveal delay={0.1}>
               <h2 className="section-title mb-6">
-                Precision That Powers <br/>
+                Precision That Powers <br />
                 <span className="text-spark">India's Industry.</span>
               </h2>
             </Reveal>
@@ -105,21 +104,103 @@ export default function About() {
               </p>
             </Reveal>
 
-            {/* Material tags */}
+            {/* Material Categorized Cards */}
             <Reveal delay={0.4}>
               <div className="mb-8">
-                <p className="text-xs text-steel-600 font-heading uppercase tracking-widest mb-3">
-                  Materials We Machine
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {['EN8', 'EN19', 'EN24', 'EN36', '20MnCr5', 'SAE 8620', '16MnCr5', 'EN353', '42CrMo4', 'SCM420'].map((m) => (
-                    <span key={m}
-                      className="px-3 py-1.5 rounded-lg text-xs font-mono text-flux-400"
-                      style={{ background: 'rgba(20,184,166,0.07)', border: '1px solid rgba(20,184,166,0.15)' }}
-                    >
-                      {m}
-                    </span>
-                  ))}
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs text-steel-500 font-heading uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-spark-500" />
+                    Materials &amp; Engineering Grades
+                  </p>
+                  <span className="text-[10px] text-steel-500 font-mono">Job Work &amp; With-Material</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Alloy Steels Card */}
+                  <div
+                    className="p-4 rounded-xl relative overflow-hidden transition-all duration-300 hover:border-spark-500/40"
+                    style={{
+                      background: 'rgba(255,107,43,0.03)',
+                      border: '1px solid rgba(255,107,43,0.18)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-heading font-bold uppercase tracking-wider text-spark-400 flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-spark-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                        Alloy Steels
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-spark-500/10 text-spark-300 border border-spark-500/20">
+                        Heat-Treated
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-steel-400 mb-3 leading-relaxed">
+                      High-tensile &amp; case-hardening steels for automotive gears, splined shafts, pinions, and high-wear components.
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { code: '20MnCr5', note: 'Carburizing Gear Steel' },
+                        { code: 'SAE 8620', note: 'High Core Toughness' },
+                        { code: '16MnCr5', note: 'Automotive Transmission' },
+                        { code: 'EN19 (4140)', note: 'High Tensile Axles' },
+                        { code: 'EN24 (4340)', note: 'Heavy Duty Shafts' },
+                        { code: 'EN353', note: 'Crown Wheel & Pinion' },
+                        { code: '42CrMo4', note: 'Fatigue Resistant' },
+                        { code: 'SCM420', note: 'Alloy Pinions' },
+                      ].map((item) => (
+                        <span
+                          key={item.code}
+                          title={item.note}
+                          className="px-2 py-1 rounded-md text-[11px] font-mono text-spark-300 bg-spark-500/10 border border-spark-500/20 hover:border-spark-500/50 hover:bg-spark-500/20 transition-colors cursor-default"
+                        >
+                          {item.code}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Non-Alloy / Carbon Steels Card */}
+                  <div
+                    className="p-4 rounded-xl relative overflow-hidden transition-all duration-300 hover:border-flux-500/40"
+                    style={{
+                      background: 'rgba(20,184,166,0.03)',
+                      border: '1px solid rgba(20,184,166,0.18)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-heading font-bold uppercase tracking-wider text-flux-400 flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-flux-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                        Non-Alloy &amp; Carbon
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-flux-500/10 text-flux-300 border border-flux-500/20">
+                        High Machinability
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-steel-400 mb-3 leading-relaxed">
+                      Medium carbon &amp; free-cutting steels for volume blank turning, stepped shafts, flanges, hubs, and cost-efficient blanks.
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { code: 'EN8 (AISI 1045)', note: 'Turned Shafts & Pins' },
+                        { code: 'EN9 (AISI 1055)', note: 'Surface Hardened' },
+                        { code: 'EN1A / 11SMn30', note: 'Free-Cutting High Speed' },
+                        { code: 'C45 / C50', note: 'Machine Blanks & Couplings' },
+                        { code: 'Mild Steel (IS 2062)', note: 'Structural & Flanges' },
+                        { code: '1018 / 1020', note: 'Turned Pins & Bushings' },
+                      ].map((item) => (
+                        <span
+                          key={item.code}
+                          title={item.note}
+                          className="px-2 py-1 rounded-md text-[11px] font-mono text-flux-300 bg-flux-500/10 border border-flux-500/20 hover:border-flux-500/50 hover:bg-flux-500/20 transition-colors cursor-default"
+                        >
+                          {item.code}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </Reveal>
@@ -134,7 +215,7 @@ export default function About() {
                 id="about-contact-btn"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
                 Start a Conversation
               </button>
@@ -152,7 +233,7 @@ export default function About() {
                   alt="Precision machined gears with DIN traceability marking"
                   className="w-full h-72 md:h-80 object-cover"
                 />
-                <div className="absolute inset-0 img-overlay"/>
+                <div className="absolute inset-0 img-overlay" />
                 {/* Badge overlay */}
                 <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
                   {['DIN 5 Accuracy', 'Laser Traceability', '100% Inspected'].map((b) => (
@@ -166,7 +247,7 @@ export default function About() {
             <div className="grid grid-cols-2 gap-3">
               {stats.map((s, i) => (
                 <Reveal key={s.label} delay={0.1 * i}>
-                  <StatCard {...s}/>
+                  <StatCard {...s} />
                 </Reveal>
               ))}
             </div>
@@ -187,7 +268,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="divider mt-20 container-xl"/>
+      <div className="divider mt-20 container-xl" />
     </section>
   );
 }
